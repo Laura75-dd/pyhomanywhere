@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario | Dark Purple</title>
+    
+    <!-- 1. Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- 2. Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 3. SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        .bg-base {
+            background-color: #f3f4f6;
+        }
+
+        /* ESTILOS PARA ERRORES DE DJANGO (IMPORTANTE PARA VER POR QUÉ FALLA) */
+        .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 5px 0 10px 0;
+            color: #dc2626; /* Rojo */
+            font-size: 0.85rem;
+            font-weight: 600;
+            background-color: #fef2f2;
+            border-left: 4px solid #dc2626;
+            padding: 8px;
+            border-radius: 4px;
+        }
+
+        /* Fix para el autocompletado del navegador */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; 
+            -webkit-text-fill-color: #1f2937 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="bg-base min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden overflow-y-auto">
+
+    <!-- DECORACIÓN DE FONDO -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob pointer-events-none"></div>
+    <div class="absolute top-0 right-1/4 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000 pointer-events-none"></div>
+    <div class="absolute -bottom-8 left-1/3 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-4000 pointer-events-none"></div>
+
+    <!-- Card Principal -->
+    <div class="relative w-full max-w-lg my-8">
+        
+        <div class="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl overflow-hidden border border-white/50">
+            
+            <!-- HEADER -->
+            <div class="bg-purple-800 px-10 py-10 text-center relative">
+                <div class="relative z-10 flex justify-center mb-4">
+                    <div class="p-3 bg-white/10 rounded-full backdrop-blur-sm border border-white/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="relative z-10 text-3xl font-bold text-white tracking-tight">Nuevo Usuario</h2>
+                <p class="relative z-10 text-purple-200 mt-2 text-sm">Ingresa tus datos para comenzar</p>
+            </div>
+
+            <!-- FORMULARIO -->
+            <div class="p-10">
+                <form method="post" id="registration-form" class="space-y-6">
+                    
+                    {% csrf_token %}
+                    
+                    <!-- ERRORES GENERALES (Non field errors) -->
+                    {% if form.non_field_errors %}
+                        <div class="errorlist mb-4">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <!-- RENDERIZADO AUTOMÁTICO DE DJANGO -->
+                    <!-- Esto asegura que los 'names' sean correctos y se muestren los errores de validación -->
+                    <div class="django-fields-wrapper space-y-5">
+                        {{ form.as_p }}
+                    </div>
+                    
+                    <!-- BOTÓN DE ENVÍO -->
+                    <div class="pt-4">
+                        <button type="submit" class="group w-full py-4 px-6 rounded-xl bg-pink-600 text-white text-sm font-bold tracking-wide shadow-lg hover:bg-pink-700 hover:shadow-pink-500/30 transform transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-pink-200 relative overflow-hidden">
+                            <span class="relative flex items-center justify-center gap-2">
+                                Crear Usuario
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white/80 group-hover:text-white transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- FOOTER -->
+            <div class="bg-gray-50/50 p-4 text-center border-t border-gray-100">
+                <p class="text-xs text-gray-400 font-light">Sus datos están protegidos y encriptados.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- LÓGICA JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('registration-form');
+
+            // 1. DICCIONARIO DE ICONOS
+            const icons = {
+                'default': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>',
+                'nombre': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>',
+                'email': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>',
+                'edad': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" /></svg>',
+                'password': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>',
+                'eye': '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>',
+                'eyeOff': '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>'
+            };
+
+            // 2. PROCESAMIENTO DINÁMICO DE LOS INPUTS DE DJANGO
+            // Buscamos inputs visibles que no sean hidden para no romper el CSRF
+            const rawInputs = form.querySelectorAll('input:not(.processed):not([type="hidden"])');
+            
+            rawInputs.forEach(input => {
+                input.classList.add('processed');
+                // Detectar si es password basado en el tipo que Django le dio
+                const isPassword = input.type === 'password';
+                
+                // A. Asignar Icono
+                let leftIconHtml = icons['default'];
+                const inputName = input.getAttribute('name');
+                
+                if (inputName) {
+                    if (inputName.includes('nombre') || inputName.includes('user') || inputName.includes('name')) leftIconHtml = icons['nombre'];
+                    if (inputName.includes('email') || inputName.includes('correo')) leftIconHtml = icons['email'];
+                    if (inputName.includes('edad') || inputName.includes('age')) leftIconHtml = icons['edad'];
+                }
+                // Si es password, forzamos el icono de candado
+                if (isPassword) leftIconHtml = icons['password'];
+
+                // B. Wrappers (Contenedores)
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative mt-1';
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                // C. Insertar Icono Izq
+                const iconContainer = document.createElement('div');
+                iconContainer.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
+                iconContainer.innerHTML = leftIconHtml;
+                wrapper.insertBefore(iconContainer, input);
+
+                // D. Botón Ojo para Password
+                if (isPassword) {
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.type = 'button'; 
+                    toggleBtn.className = 'absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer text-gray-400 hover:text-pink-600 transition-colors focus:outline-none';
+                    toggleBtn.innerHTML = icons['eye']; 
+                    
+                    toggleBtn.addEventListener('click', () => {
+                        const currentType = input.getAttribute('type');
+                        if (currentType === 'password') {
+                            input.setAttribute('type', 'text');
+                            toggleBtn.innerHTML = icons['eyeOff']; 
+                        } else {
+                            input.setAttribute('type', 'password');
+                            toggleBtn.innerHTML = icons['eye']; 
+                        }
+                    });
+                    wrapper.appendChild(toggleBtn);
+                }
+
+                // E. Clases Tailwind
+                input.classList.add(
+                    'w-full', 'bg-gray-50', 'text-gray-800', 'text-sm', 
+                    'rounded-xl', 'border', 'border-gray-200', 
+                    'pl-10', // Espacio izq
+                    isPassword ? 'pr-10' : 'pr-4', // Espacio der
+                    'py-4', 'placeholder-gray-400',
+                    'transition-all', 'duration-200',
+                    'focus:outline-none', 'focus:bg-white', 
+                    'focus:border-pink-500', 'focus:ring-4', 'focus:ring-pink-100'
+                );
+                input.style.outline = 'none';
+
+                // F. Labels y Errores (Ajuste para as_p de Django)
+                // as_p envuelve en <p>. Buscamos el párrafo padre.
+                const parentP = wrapper.parentNode;
+                if(parentP && parentP.tagName === 'P') {
+                    parentP.classList.add('mb-5');
+                    
+                    const label = parentP.querySelector('label');
+                    if(label) {
+                        label.classList.add('block', 'text-xs', 'font-bold', 'text-gray-500', 'uppercase', 'tracking-widest', 'mb-2', 'ml-1');
+                    }
+                }
+            });
+
+            // 3. ENVÍO DEL FORMULARIO
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); 
+                
+                // Intento de obtener nombre para personalizar, sino usa "Usuario"
+                let nombreDisplay = 'Usuario';
+                const nombreInput = form.querySelector('input[name*="nombre"]'); // Busca algo que parezca nombre
+                if (nombreInput && nombreInput.value) nombreDisplay = nombreInput.value;
+
+                Swal.fire({
+                    title: 'Verificación',
+                    text: `¿Deseas crear la cuenta para ${nombreDisplay}?`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, crear',
+                    cancelButtonText: 'Cancelar',
+                    buttonsStyling: false,
+                    heightAuto: false, // Fix para scroll
+                    customClass: {
+                        popup: 'rounded-3xl p-8 font-sans',
+                        title: 'text-xl font-bold text-gray-800 mb-2',
+                        htmlContainer: 'text-gray-500',
+                        confirmButton: 'bg-purple-800 text-white px-6 py-3 rounded-xl hover:bg-purple-900 transition ml-2 shadow-md',
+                        cancelButton: 'bg-white text-gray-500 border border-gray-200 px-6 py-3 rounded-xl hover:bg-gray-50 transition mr-2'
+                    },
+                    backdrop: `rgba(255, 255, 255, 0.8)` 
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: '',
+                            html: '<div class="flex flex-col items-center"><div class="w-8 h-8 border-4 border-gray-200 border-t-pink-600 rounded-full animate-spin mb-4"></div><span class="text-gray-500 text-sm">Enviando datos...</span></div>',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            heightAuto: false,
+                            timer: 500, // Un poco más rápido
+                            customClass: { popup: 'rounded-3xl p-8' },
+                            didOpen: () => { Swal.showLoading(); }
+                        }).then(() => {
+                            // ENVÍO REAL AL BACKEND
+                            HTMLFormElement.prototype.submit.call(form);
+                        });
+                    }
+                });
+            });
+        });
+
+        // Configuración de animación
+        tailwind.config = {
+            theme: {
+                extend: {
+                    animation: { blob: "blob 7s infinite" },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</body>
+</html>
