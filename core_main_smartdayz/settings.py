@@ -38,10 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    "usuarios_laura",
-    "proyectos_lau",
-    "proveedores_lau",
-    "clientes_lau",
+    "perfiles",
+    "proyectos",
+    "proveedores",
+    "clientes",
 
 ]
 
@@ -122,3 +122,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
+
+# configuracion de autenticacion
+#URLS de redireccion para login y logout
+
+LOGIN_REDIRECT_URL = 'home/'
+LOGOUT_REDIRECT_URL = 'home/'
+
+

@@ -1,1 +1,171 @@
-<marquee>{{ mensaje }} de {{ user }}</marquee>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | SmartDayz</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta para textos y Playball para el Logo -->
+    <link href="https://fonts.googleapis.com/css2?family=Playball&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-logo { font-family: 'Playball', cursive; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.5s ease-out forwards; }
+        .delay-100 { animation-delay: 100ms; opacity: 0; }
+        .delay-200 { animation-delay: 200ms; opacity: 0; }
+        
+        /* Efecto de cristal oscuro para las tarjetas */
+        .glass-dark {
+            background-color: rgba(15, 23, 42, 0.85); 
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 font-sans antialiased relative">
+
+    <!-- FONDO DE CIUDAD, NATURALEZA Y ATARDECER -->
+    <div class="fixed inset-0 z-[-1]">
+        <img src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=2000&auto=format&fit=crop" 
+             class="w-full h-full object-cover" alt="Ciudad Naturaleza Atardecer">
+        <div class="absolute inset-0 bg-slate-900/70 mix-blend-multiply"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-transparent to-slate-900/95"></div>
+    </div>
+
+    <!-- NAVBAR SUPERIOR OSCURO -->
+    <nav class="glass-dark sticky top-0 z-50 shadow-lg border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer">
+                    <div class="text-amber-400 drop-shadow-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                    </div>
+                    <span class="text-3xl text-amber-400 font-logo tracking-wide drop-shadow-md">SmartDayz</span>
+                </div>
+                
+                <!-- Usuario y Salir -->
+                <div class="flex items-center gap-4">
+                    <div class="hidden md:flex flex-col items-end">
+                        <span class="text-sm font-bold text-white">{{ user.username|default:"Usuario" }}</span>
+                        <span class="text-xs font-medium text-amber-400">{{ perfil.rol|default:"Administrador" }}</span>
+                    </div>
+                    <div class="flex items-center justify-center w-10 h-10 rounded-full bg-slate-800 border border-amber-400/30 text-amber-400 font-bold shadow-sm">
+                        {{ user.username.0|upper|default:"U" }}
+                    </div>
+                    <a href="/" class="ml-2 text-xs bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white px-3 py-1.5 rounded-lg transition-colors">
+                        Salir
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+        
+        <header class="mb-8 animate-fade-in text-center sm:text-left">
+            <p class="text-sm font-bold text-amber-400 mb-1 uppercase tracking-wider drop-shadow-md">{{ perfil.proyecto.nombre|default:"Mi Negocio" }}</p>
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white drop-shadow-lg">
+                {{ mensaje|default:"¡Bienvenido al panel!" }} 👋
+            </h1>
+            <p class="text-slate-300 mt-2 text-base font-medium drop-shadow-md">Tu día inteligente comienza aquí. Resumen general.</p>
+        </header>
+
+        <!-- STATS RÁPIDAS (Se eliminó "Total Pedidos") -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 animate-fade-in delay-100">
+            <div class="glass-dark p-5 rounded-2xl shadow-lg border-t border-t-amber-400/20 text-center sm:text-left">
+                <p class="text-sm font-medium text-slate-400 mb-1">Total Clientes</p>
+                <h4 class="text-2xl font-bold text-white">{{ stats.nuevos_clientes|default:"0" }}</h4>
+            </div>
+            <div class="glass-dark p-5 rounded-2xl shadow-lg border-t border-t-amber-400/20 text-center sm:text-left">
+                <p class="text-sm font-medium text-slate-400 mb-1">Proveedores</p>
+                <h4 class="text-2xl font-bold text-white">{{ stats.total_proveedores|default:"0" }}</h4>
+            </div>
+            <div class="glass-dark p-5 rounded-2xl shadow-lg flex flex-col justify-center border-t border-t-amber-400/20 text-center sm:text-left">
+                <p class="text-sm font-medium text-slate-400 mb-2">Estado del Sistema</p>
+                <div class="flex items-center justify-center sm:justify-start gap-2">
+                    <span class="relative flex h-3 w-3">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-sm font-bold text-emerald-400">Operativo</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCESOS DIRECTOS (Se eliminó el botón de Pedidos) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-fade-in delay-200">
+            
+            <!-- Botón 1: Clientes -->
+            <a href="/clientes/crear/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-400 group-hover:text-slate-900 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">Clientes</h3>
+                <p class="text-xs text-slate-400">Gestiona tu cartera</p>
+            </a>
+
+            <!-- Botón 2: Proveedores -->
+            <a href="/proveedores/crear/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center">
+                <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-400 group-hover:text-slate-900 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">Proveedores</h3>
+                <p class="text-xs text-slate-400">Surtido y compras</p>
+            </a>
+
+            <!-- Botón 3: Equipo -->
+            <a href="/perfiles/crear/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center">
+                <span class="absolute top-3 right-3 bg-amber-400 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md uppercase">Admin</span>
+                <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-400 group-hover:text-slate-900 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">Equipo</h3>
+                <p class="text-xs text-slate-400">Usuarios del sistema</p>
+            </a>
+
+            <!-- Botón 4: Proyecto (Dinámico) -->
+            {% if user.is_superuser %}
+                <a href="/proyectos/crear/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-red-400/50 hover:shadow-red-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center border-red-500/30">
+                    <span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md uppercase">Root</span>
+                    <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-red-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-red-500 group-hover:text-white group-hover:scale-110 transition-all duration-300 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-red-400 transition-colors">Nuevo Proyecto</h3>
+                    <p class="text-xs text-slate-400">Crear desde cero</p>
+                </a>
+            {% elif perfil.rol == 'Administrador' %}
+                <a href="/proyectos/editar/{{ perfil.proyecto.id }}/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center border-amber-500/20">
+                    <span class="absolute top-3 right-3 bg-amber-400 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md uppercase">Ajustes</span>
+                    <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-400 group-hover:text-slate-900 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">Mi Proyecto</h3>
+                    <p class="text-xs text-slate-400">Datos y horarios</p>
+                </a>
+            {% else %}
+                <a href="/proyectos/detalle/{{ perfil.proyecto.id }}/" class="group glass-dark rounded-2xl p-6 shadow-lg hover:border-amber-400/50 hover:shadow-amber-400/20 transition-all relative overflow-hidden flex flex-col items-center text-center">
+                    <div class="w-14 h-14 bg-slate-800 border border-slate-700 text-amber-400 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-amber-400 group-hover:text-slate-900 group-hover:scale-110 transition-all duration-300 shadow-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1 group-hover:text-amber-400 transition-colors">El Proyecto</h3>
+                    <p class="text-xs text-slate-400">Ver información</p>
+                </a>
+            {% endif %}
+
+        </div>
+    </main>
+
+</body>
+</html>

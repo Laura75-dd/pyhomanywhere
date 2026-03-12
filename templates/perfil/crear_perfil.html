@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario | SmartDayz</title>
+    <script>
+        tailwind = {
+            config: {
+                theme: {
+                    extend: {
+                        animation: { blob: "blob 7s infinite" },
+                        keyframes: {
+                            blob: {
+                                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                                "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                                "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                                "100%": { transform: "translate(0px, 0px) scale(1)" },
+                            },
+                        },
+                    },
+                },
+            }
+        }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        input:-webkit-autofill { -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; }
+        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4 relative overflow-x-hidden bg-slate-900">
+    <div class="fixed inset-0 z-[-2] bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+    <div class="fixed inset-0 z-[-1] bg-slate-900/60 backdrop-blur-sm"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-purple-600 rounded-full mix-blend-screen filter blur-[100px] opacity-40 animate-blob pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-pink-600 rounded-full mix-blend-screen filter blur-[100px] opacity-30 animate-blob pointer-events-none" style="animation-delay: 3s;"></div>
+
+    <div class="relative w-full max-w-2xl my-8">
+        <div class="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20">
+            <div class="bg-gradient-to-r from-purple-800 to-indigo-900 px-8 py-10 text-center text-white">
+                <div class="flex justify-center mb-4">
+                    <div class="p-3 bg-white/10 rounded-2xl border border-white/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                        </svg>
+                    </div>
+                </div>
+                <h2 class="text-3xl font-bold tracking-tight">Registro de Personal</h2>
+                <p class="text-purple-200 mt-2">Asigna credenciales y vincula al usuario con un proyecto.</p>
+            </div>
+
+            <div class="p-8 md:p-12">
+                <form id="registration-form" method="POST" class="space-y-6">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+                            <strong class="font-bold">Revisa los campos:</strong>
+                            <span class="block sm:inline">Hubo un error al procesar tu solicitud.</span>
+                        </div>
+                    {% endif %}
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 django-fields-wrapper">
+
+                        <p class="md:col-span-2 text-xs font-black text-purple-800 uppercase tracking-widest border-b pb-2">Información de Cuenta</p>
+                        <p>
+                            <label for="id_username">Usuario:</label>
+                            <input type="text" name="username" required id="id_username" placeholder="ej. jdoe" value="{{ form.username.value|default_if_none:'' }}">
+                            {% if form.username.errors %}<span class="text-red-500 text-xs">{{ form.username.errors.0 }}</span>{% endif %}
+                        </p>
+                        <p>
+                            <label for="id_email">Email:</label>
+                            <input type="email" name="email" required id="id_email" placeholder="correo@empresa.com" value="{{ form.email.value|default_if_none:'' }}">
+                            {% if form.email.errors %}<span class="text-red-500 text-xs">{{ form.email.errors.0 }}</span>{% endif %}
+                        </p>
+                        <p>
+                            <label for="id_password">Contraseña Temporal:</label>
+                            <input type="password" name="password" required id="id_password">
+                            {% if form.password.errors %}<span class="text-red-500 text-xs">{{ form.password.errors.0 }}</span>{% endif %}
+                        </p>
+                        <p>
+                            <label for="id_phone">Teléfono de Contacto:</label>
+                            <input type="text" name="telefono" id="id_phone" placeholder="55 1234 5678" value="{{ form.telefono.value|default_if_none:'' }}">
+                            {% if form.telefono.errors %}<span class="text-red-500 text-xs">{{ form.telefono.errors.0 }}</span>{% endif %}
+                        </p>
+
+                        <p class="md:col-span-2 text-xs font-black text-purple-800 uppercase tracking-widest border-b pb-2 mt-4">Asignación Laboral</p>
+                        <p>
+                            <label for="id_rol">Rol en Sistema:</label>
+                            {{ form.rol }}
+                        </p>
+                        <p>
+                            <label for="id_proyecto">Vincular a Proyecto:</label>
+                            {{ form.proyecto }}
+                        </p>
+                    </div>
+
+                    <div class="pt-8 flex gap-4">
+                        <a href="{% url 'home' %}" class="flex-1 py-4 px-6 rounded-xl bg-gray-100 text-gray-500 font-bold hover:bg-gray-200 transition-all text-center flex items-center justify-center">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="flex-[2] py-4 px-6 rounded-xl bg-purple-800 text-white font-bold shadow-lg hover:bg-purple-900 transform transition-all flex justify-center items-center gap-2">
+                            <span>Crear Usuario</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('registration-form');
+            const icons = {
+                'user': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>',
+                'email': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>',
+                'pass': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" /></svg>',
+                'briefcase': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 6V5a2 2 0 012-2h4a2 2 0 012 2v1h3a2 2 0 012 2v8a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h3zm2-1v1h4V5H8zm-4 3v8h12V8H4z" clip-rule="evenodd" /></svg>'
+            };
+
+            const rawInputs = form.querySelectorAll('input, select');
+            rawInputs.forEach(input => {
+                // Evitamos procesar el token de seguridad oculto
+                if(input.name === 'csrfmiddlewaretoken') return;
+
+                const name = input.name.toLowerCase();
+                let icon = icons['user'];
+                if(name.includes('email')) icon = icons['email'];
+                if(name.includes('password')) icon = icons['pass'];
+                if(name.includes('proyecto') || name.includes('rol')) icon = icons['briefcase'];
+
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative mt-1';
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                const iconDiv = document.createElement('div');
+                iconDiv.className = 'absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none';
+                iconDiv.innerHTML = icon;
+                wrapper.insertBefore(iconDiv, input);
+
+                input.classList.add('w-full', 'bg-gray-50', 'border-gray-200', 'rounded-xl', 'pl-10', 'py-3', 'text-sm', 'focus:ring-4', 'focus:ring-purple-100', 'focus:border-purple-600', 'transition-all');
+                const label = wrapper.closest('p')?.querySelector('label');
+                if(label) label.classList.add('block', 'text-[10px]', 'font-bold', 'text-gray-400', 'uppercase', 'mb-1', 'ml-1');
+            });
+
+            // Animación al enviar
+            form.addEventListener('submit', function(e) {
+                if(!this.checkValidity()) return;
+                e.preventDefault();
+                const currentForm = this;
+
+                Swal.fire({
+                    title: '<span style="color:#6b21a8">Creando Credenciales...</span>',
+                    html: '<div class="flex justify-center my-4"><div class="animate-spin rounded-full h-10 w-10 border-b-2 border-[#6b21a8]"></div></div>',
+                    showConfirmButton: false,
+                    allowOutsideClick: false,
+                    background: '#ffffff',
+                    customClass: { popup: 'rounded-3xl p-6 border border-gray-100 shadow-2xl' },
+                    timer: 1500
+                }).then(() => {
+                    currentForm.submit();
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -5,16 +5,16 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    #URL DE MI APP USUARIOS
-    path('',include('usuarios_laura.urls')),
+    #URL DE MI APP PERFILES
+    path('',include('perfiles.urls')),
 
     #URL DE MI APP PROYECTOS
-    path('',include('proyectos_lau.urls')),
+    path('',include('proyectos.urls')),
 
     #URL DE MI APP PROVEEDORES
-    path('',include('proveedores_lau.urls')),
+    path('',include('proveedores.urls')),
 
     #URL DE MI APP CLIENTES
-    path('',include('clientes_lau.urls')),
+    path('',include('clientes.urls')),
 
 ]

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo Proveedor | SmartDayz</title>
+    
+    <script>
+        tailwind = {
+            config: {
+                theme: {
+                    extend: {
+                        animation: { 
+                            blob: "blob 15s infinite alternate" 
+                        },
+                        keyframes: {
+                            blob: {
+                                "0%": { transform: "translate(0px, 0px) scale(1)" },
+                                "50%": { transform: "translate(80px, -50px) scale(1.1)" },
+                                "100%": { transform: "translate(-50px, 80px) scale(0.9)" }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Fix para el autocompletado del navegador */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        textarea:-webkit-autofill,
+        select:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; 
+            -webkit-text-fill-color: #1f2937 !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col relative overflow-x-hidden bg-slate-900 text-gray-800">
+
+    <div class="fixed inset-0 z-[-2] bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat fixed"></div>
+    <div class="fixed inset-0 z-[-1] bg-slate-900/50 backdrop-blur-sm"></div>
+
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden z-[-1] pointer-events-none">
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-500 rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob"></div>
+        <div class="absolute top-40 right-1/4 w-[30rem] h-[30rem] bg-pink-500 rounded-full mix-blend-screen filter blur-[120px] opacity-40 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-[120px] opacity-50 animate-blob" style="animation-delay: 4s;"></div>
+    </div>
+
+    <nav class="sticky top-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-3">
+                    <a href="{% url 'home' %}" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                    </a>
+                    <span class="text-xl font-bold text-white tracking-tight ml-2">Volver al Home</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow flex items-center justify-center p-4 py-12">
+        <div class="relative w-full max-w-3xl">
+            
+            <div class="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/50">
+                
+                <div class="bg-gradient-to-r from-purple-800 to-purple-950 px-8 py-8 text-white relative">
+                    <div class="flex items-center gap-4">
+                        <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-sm shadow-inner border border-white/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold tracking-tight">Registrar Nuevo Proveedor</h2>
+                            <p class="text-purple-200 text-sm mt-1">Ingresa los datos de contacto y tipo de servicio del proveedor.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8">
+                    <form id="proveedor-form" method="POST" action="{% url 'crear_proveedor' %}" class="space-y-6">
+                        {% csrf_token %}
+                        
+                        {% if form.errors %}
+                            <div class="bg-red-500/10 border border-red-500/50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4">
+                                Por favor revisa los datos ingresados.
+                            </div>
+                        {% endif %}
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 django-fields-wrapper">
+                            {% for field in form %}
+                                <p {% if field.name == 'direccion' %}class="md:col-span-2"{% endif %}>
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <span class="text-xs text-gray-400 mt-1">{{ field.help_text }}</span>
+                                    {% endif %}
+                                    {% if field.errors %}
+                                        <span class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</span>
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="pt-6 flex flex-col sm:flex-row gap-4 border-t border-gray-100 mt-6">
+                            <a href="{% url 'home' %}" class="w-full sm:w-1/3 py-3 px-6 rounded-xl bg-white border-2 border-gray-200 text-gray-600 font-bold text-center hover:bg-gray-50 hover:border-gray-300 transition-all focus:outline-none flex items-center justify-center">
+                                Cancelar
+                            </a>
+                            <button type="submit" class="w-full sm:w-2/3 py-3 px-6 rounded-xl bg-purple-800 text-white font-bold shadow-lg shadow-purple-900/30 hover:bg-purple-900 transform transition-all focus:outline-none focus:ring-4 focus:ring-purple-300 flex justify-center items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                                Guardar Proveedor
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('proveedor-form');
+
+            // 1. DICCIONARIO DE ICONOS
+            const icons = {
+                'default': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>',
+                'empresa': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" /></svg>',
+                'user': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>',
+                'email': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>',
+                'phone': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>',
+                'servicio': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" /></svg>',
+                'direccion': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>'
+            };
+
+            // --- MAGIA DE DISEÑO ---
+            const rawInputs = form.querySelectorAll('input:not([type="hidden"]), textarea, select');
+            
+            rawInputs.forEach(input => {
+                if(input.name === 'csrfmiddlewaretoken') return;
+
+                const tagName = input.tagName.toLowerCase();
+                const inputName = input.getAttribute('name') || '';
+                
+                // Determinar el icono correcto
+                let leftIconHtml = icons['default'];
+                if (inputName.includes('empresa') || inputName.includes('nombre')) leftIconHtml = icons['empresa'];
+                if (inputName.includes('contacto') || inputName.includes('user')) leftIconHtml = icons['user'];
+                if (inputName.includes('email') || inputName.includes('correo')) leftIconHtml = icons['email'];
+                if (inputName.includes('telef') || inputName.includes('phone')) leftIconHtml = icons['phone'];
+                if (inputName.includes('servicio') || inputName.includes('categoria') || inputName.includes('tipo')) leftIconHtml = icons['servicio'];
+                if (inputName.includes('direccion')) leftIconHtml = icons['direccion'];
+
+                // Envolver el elemento para ponerle iconos
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative mt-1';
+                input.parentNode.insertBefore(wrapper, input);
+                wrapper.appendChild(input);
+
+                // Insertar Icono Izquierdo
+                const iconContainer = document.createElement('div');
+                const iconPositionClasses = tagName === 'textarea' ? 'pt-4 items-start' : 'items-center';
+                iconContainer.className = `absolute inset-y-0 left-0 pl-3 flex pointer-events-none ${iconPositionClasses}`;
+                iconContainer.innerHTML = leftIconHtml;
+                wrapper.insertBefore(iconContainer, input);
+
+                // Aplicar clases de Tailwind
+                input.classList.add(
+                    'w-full', 'bg-gray-50', 'text-gray-800', 'text-sm', 
+                    'rounded-xl', 'border', 'border-gray-200', 
+                    'pl-10', 'pr-4', 'py-3', 
+                    'placeholder-gray-400', 'transition-all', 'focus:outline-none', 
+                    'focus:bg-white', 'focus:border-purple-500', 'focus:ring-4', 'focus:ring-purple-100'
+                );
+                
+                if (tagName === 'select') {
+                    input.classList.add('appearance-none'); 
+                    const arrowContainer = document.createElement('div');
+                    arrowContainer.className = 'absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none';
+                    arrowContainer.innerHTML = '<svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
+                    wrapper.appendChild(arrowContainer);
+                }
+
+                if (tagName === 'textarea') {
+                    input.classList.add('resize-none');
+                    if(!input.getAttribute('rows')) input.setAttribute('rows', '3');
+                }
+
+                // Estilizar Labels
+                const parentP = wrapper.closest('p');
+                if (parentP) {
+                    const label = parentP.querySelector('label');
+                    if (label) {
+                        label.classList.add('block', 'text-xs', 'font-bold', 'text-gray-500', 'uppercase', 'tracking-widest', 'mb-2', 'ml-1');
+                    }
+                    // Quité la lógica que forzaba a los select a tomar las 2 columnas para que quede como tu diseño de 2 columnas original
+                }
+            });
+
+            // --- LÓGICA DE ENVÍO Y SWEETALERT ---
+            form.addEventListener('submit', function(e) {
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return; 
+                }
+
+                e.preventDefault(); 
+                
+                let nombreDisplay = 'este proveedor';
+                const empresaInput = form.querySelector('input[name*="empresa"]') || form.querySelector('input[name*="nombre"]');
+                if (empresaInput && empresaInput.value) nombreDisplay = empresaInput.value;
+                
+                Swal.fire({
+                    title: 'Confirmación',
+                    text: `¿Deseas registrar a ${nombreDisplay} como proveedor?`,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, guardar',
+                    cancelButtonText: 'Cancelar',
+                    buttonsStyling: false,
+                    customClass: {
+                        popup: 'rounded-3xl p-6 font-sans',
+                        title: 'text-xl font-bold text-gray-800',
+                        htmlContainer: 'text-gray-500 mt-2',
+                        confirmButton: 'bg-purple-600 text-white px-6 py-3 rounded-xl hover:bg-purple-700 transition ml-2 shadow-md font-semibold',
+                        cancelButton: 'bg-white text-gray-500 border border-gray-200 px-6 py-3 rounded-xl hover:bg-gray-50 transition mr-2 font-semibold'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Guardando Proveedor...',
+                            html: '<div class="flex flex-col items-center"><div class="w-8 h-8 border-4 border-gray-200 border-t-purple-600 rounded-full animate-spin mb-4"></div><span class="text-gray-500 text-sm font-medium">Procesando información...</span></div>',
+                            showConfirmButton: false,
+                            allowOutsideClick: false,
+                            customClass: { popup: 'rounded-3xl p-8' },
+                            didOpen: () => { Swal.showLoading(); }
+                        });
+
+                        setTimeout(() => { 
+                            HTMLFormElement.prototype.submit.call(form); 
+                        }, 1000);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
