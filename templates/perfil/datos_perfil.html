@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil | SmartDayz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#1a1a2e] text-white">
+
+    <div class="min-h-screen flex items-center justify-center p-6">
+        
+        <div class="bg-[#16213e] rounded-2xl shadow-2xl border border-purple-900/30 p-8 w-full max-w-md text-center">
+            
+            <div class="relative w-32 h-32 mx-auto mb-6">
+                {% if perfil.foto_perfil %}
+                    <img src="{{ perfil.foto_perfil.url }}" alt="Foto de perfil" class="w-full h-full rounded-full object-cover border-4 border-purple-500 shadow-lg">
+                {% else %}
+                    <div class="w-full h-full rounded-full bg-purple-600 flex items-center justify-center text-5xl font-bold border-4 border-purple-800 shadow-lg uppercase">
+                        {{ perfil.usuario.username|first }}
+                    </div>
+                {% endif %}
+            </div>
+
+            <h2 class="text-3xl font-bold text-white mb-1 uppercase">
+                {{ perfil.usuario.first_name|default:perfil.usuario.username }}
+            </h2>
+            <p class="text-purple-400 font-medium mb-6">@{{ perfil.usuario.username }}</p>
+
+            <div class="space-y-4 text-left bg-[#0f3460] p-6 rounded-xl border border-purple-800/50">
+                
+                <div class="flex justify-between items-center border-b border-gray-600 pb-2">
+                    <span class="text-gray-400 text-sm">Rol</span>
+                    <span class="font-semibold {% if perfil.is_administrador %}text-yellow-400{% else %}text-white{% endif %}">
+                        {{ perfil.rol }}
+                    </span>
+                </div>
+
+                <div class="flex justify-between items-center border-b border-gray-600 pb-2">
+                    <span class="text-gray-400 text-sm">Puesto</span>
+                    <span class="font-semibold text-white">
+                        {% if perfil.puesto == 'Otro' %}
+                            {{ perfil.puesto_personalizado }}
+                        {% else %}
+                            {{ perfil.puesto|default:"No asignado" }}
+                        {% endif %}
+                    </span>
+                </div>
+
+                <div class="flex justify-between items-center border-b border-gray-600 pb-2">
+                    <span class="text-gray-400 text-sm">Teléfono</span>
+                    <span class="font-semibold text-white">{{ perfil.telefono|default:"Sin registrar" }}</span>
+                </div>
+
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-400 text-sm">Sucursal / Proyecto</span>
+                    <span class="font-semibold text-green-400">{{ perfil.proyecto|default:"Sin asignar" }}</span>
+                </div>
+
+            </div>
+
+            <div class="mt-8 flex flex-col gap-4">
+                
+                <div class="flex gap-4">
+                    <a href="{% url 'home' %}" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-bold transition text-center shadow-md">
+                        Volver
+                    </a>
+                    <a href="{% url 'editar_perfil' %}" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg font-bold transition shadow-md text-center block">
+                        Editar
+                    </a>
+                </div>
+
+                {% if perfil.is_administrador %}
+                <div class="mt-2 pt-5 border-t border-gray-600">
+                    <p class="text-xs text-yellow-400 font-bold uppercase tracking-wider mb-3 text-left">
+                        Opciones de Administrador
+                    </p>
+                    <div class="flex gap-4">
+                        
+                        <a href="{% url 'crear_perfil' %}" class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2.5 rounded-lg font-bold transition text-center text-sm flex items-center justify-center gap-2 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
+                            </svg>
+                            Crear Personal
+                        </a>
+                        
+                        <a href="{% url 'lista_equipo' %}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-bold transition text-center text-sm flex items-center justify-center gap-2 shadow-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+                            </svg>
+                            Ver Equipo
+                        </a>
+                        
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+            
+        </div>
+    </div>
+
+</body>
+</html>

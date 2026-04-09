@@ -5,72 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Proyecto | SmartDayz</title>
     
-    <script>
-        tailwind = {
-            config: {
-                theme: {
-                    extend: {
-                        animation: { 
-                            blob: "blob 15s infinite alternate" 
-                        },
-                        keyframes: {
-                            blob: {
-                                "0%": { transform: "translate(0px, 0px) scale(1)" },
-                                "50%": { transform: "translate(80px, -50px) scale(1.1)" },
-                                "100%": { transform: "translate(-50px, 80px) scale(0.9)" }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         body { font-family: 'Inter', sans-serif; }
-        
-        /* Fix para el autocompletado del navegador */
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        textarea:-webkit-autofill,
-        select:-webkit-autofill {
-            -webkit-box-shadow: 0 0 0 30px #f9fafb inset !important; 
+        ::selection { background-color: #7e22ce; color: white; }
+
+        input[type="text"], input[type="number"], input[type="email"], input[type="password"], textarea, select {
+            width: 100% !important;
+            padding: 0.75rem 1rem 0.75rem 2.5rem !important;
+            border-radius: 0.75rem !important;
+            border: 1px solid #E5E7EB !important;
+            background-color: #F9FAFB !important;
+            font-size: 0.875rem !important;
+            color: #1F2937 !important;
+            transition: all 0.2s !important;
+            outline: none !important;
+        }
+
+        /* Padding especial para textarea para que el texto no quede sobre el ícono superior */
+        textarea {
+            padding-top: 1rem !important;
+            resize: none;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: #7e22ce !important;
+            background-color: #ffffff !important;
+            box-shadow: 0 0 0 4px rgba(126, 34, 206, 0.1) !important;
+        }
+
+        label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+            margin-left: 0.25rem;
+        }
+
+        input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px #ffffff inset !important; 
             -webkit-text-fill-color: #1f2937 !important;
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        /* Ocultar la flecha nativa del select para poner una personalizada */
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-        }
+        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+        option[disabled] { display: none; }
     </style>
 </head>
-<body class="min-h-screen flex flex-col relative overflow-x-hidden bg-slate-900 text-gray-800">
+<body class="min-h-screen flex flex-col relative overflow-x-hidden bg-[#0f172a] text-gray-800">
 
-    <div class="fixed inset-0 z-[-2] bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center bg-no-repeat fixed"></div>
-    <div class="fixed inset-0 z-[-1] bg-slate-900/50 backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-[-3] bg-[url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
+    <div class="fixed inset-0 z-[-2] bg-[#0f172a]/80 backdrop-blur-sm"></div>
 
     <div class="fixed top-0 left-0 w-full h-full overflow-hidden z-[-1] pointer-events-none">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-500 rounded-full mix-blend-screen filter blur-[120px] opacity-60 animate-blob"></div>
-        <div class="absolute top-40 right-1/4 w-[30rem] h-[30rem] bg-pink-500 rounded-full mix-blend-screen filter blur-[120px] opacity-40 animate-blob" style="animation-delay: 2s;"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-indigo-600 rounded-full mix-blend-screen filter blur-[120px] opacity-50 animate-blob" style="animation-delay: 4s;"></div>
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-purple-700 rounded-full mix-blend-screen filter blur-[120px] opacity-40 animate-blob"></div>
+        <div class="absolute top-40 right-1/4 w-[30rem] h-[30rem] bg-violet-700 rounded-full mix-blend-screen filter blur-[120px] opacity-30 animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-fuchsia-800 rounded-full mix-blend-screen filter blur-[120px] opacity-20 animate-blob" style="animation-delay: 4s;"></div>
     </div>
 
-    <nav class="sticky top-0 z-50 bg-white/10 backdrop-blur-md border-b border-white/20 shadow-lg">
+    <nav class="sticky top-0 z-50 bg-black/30 backdrop-blur-md border-b border-white/10 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-3">
-                    <a href="{% url 'home' %}" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors">
+                    <a href="{% url 'home' %}" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </a>
-                    <span class="text-xl font-bold text-white tracking-tight ml-2">Volver al Home</span>
+                    <span class="text-xl font-bold text-white tracking-tight ml-2 drop-shadow-md">Volver al Home</span>
                 </div>
             </div>
         </div>
@@ -78,56 +84,59 @@
 
     <main class="flex-grow flex items-center justify-center p-4 py-12">
         <div class="relative w-full max-w-3xl">
-            
-            <div class="relative bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/50">
+            <div class="relative bg-[#f8fafc] rounded-[2rem] shadow-2xl overflow-hidden">
                 
-                <div class="bg-gradient-to-r from-purple-800 to-purple-950 px-8 py-8 text-white relative">
+                <div class="bg-gradient-to-r from-purple-900 to-violet-900 px-10 py-10 relative">
                     <div class="flex items-center gap-4">
-                        <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-sm shadow-inner border border-white/10">
-                            <!-- Icono de Editar -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-100" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                        <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-sm shadow-inner border border-white/20">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
                         </div>
                         <div>
-                            <!-- CAMBIO 1: Títulos dinámicos -->
-                            <h2 class="text-2xl font-bold tracking-tight">Editar: {{ proyecto.nombre }}</h2>
-                            <p class="text-purple-200 text-sm mt-1">Actualiza la información de tu negocio.</p>
+                            <h2 class="text-3xl font-black text-white leading-tight">Editar: {{ proyecto.nombre }}</h2>
+                            <p class="text-purple-200 text-sm mt-1 font-medium">Actualiza la información de tu proyecto.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="p-8">
-                    <!-- CAMBIO 2: Action vacío para que actualice sobre el mismo proyecto -->
+                <div class="p-10 bg-white">
                     <form id="proyecto-form" method="POST" action="" class="space-y-6">
                         {% csrf_token %}
                         
                         {% if form.errors %}
-                            <div class="bg-red-500/10 border border-red-500/50 text-red-600 px-4 py-3 rounded-xl text-sm mb-4">
-                                Por favor revisa los datos ingresados.
+                            <div class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-xl text-sm mb-6 shadow-sm">
+                                <p class="font-bold mb-1">Por favor revisa los datos ingresados.</p>
                             </div>
                         {% endif %}
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 django-fields-wrapper">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            
+                            <div class="md:col-span-2 mt-2 mb-2 border-b border-purple-100 pb-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+                                <h3 class="text-xs font-black text-purple-800 uppercase tracking-widest">Información del Proyecto</h3>
+                            </div>
+
                             {% for field in form %}
-                                <p {% if field.name == 'descripcion' %}class="md:col-span-2"{% endif %}>
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+                                <div class="flex flex-col {% if field.name == 'descripcion' %}md:col-span-2{% endif %}">
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     {{ field }}
                                     {% if field.help_text %}
-                                        <span class="text-xs text-gray-400 mt-1">{{ field.help_text }}</span>
+                                        <span class="text-xs text-gray-400 mt-1 ml-1">{{ field.help_text }}</span>
                                     {% endif %}
                                     {% if field.errors %}
-                                        <span class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</span>
+                                        <span class="text-red-500 text-xs mt-1 ml-1">{{ field.errors.0 }}</span>
                                     {% endif %}
-                                </p>
+                                </div>
                             {% endfor %}
                         </div>
                         
-                        <div class="pt-6 flex flex-col sm:flex-row gap-4 border-t border-gray-100 mt-6">
-                            <a href="{% url 'home' %}" class="w-full sm:w-1/3 py-3 px-6 rounded-xl bg-white border-2 border-gray-200 text-gray-600 font-bold text-center hover:bg-gray-50 hover:border-gray-300 transition-all focus:outline-none flex items-center justify-center">
+                        <div class="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-slate-100 mt-8 gap-4">
+                            <a href="{% url 'home' %}" class="w-full sm:w-auto px-10 py-4 bg-white border border-slate-200 text-slate-700 text-xs font-black rounded-2xl hover:bg-slate-50 transition-all uppercase tracking-widest text-center shadow-sm">
                                 Cancelar
                             </a>
-                            <!-- CAMBIO 3: Botón de Guardar Cambios -->
-                            <button type="submit" class="w-full sm:w-2/3 py-3 px-6 rounded-xl bg-purple-800 text-white font-bold shadow-lg shadow-purple-900/30 hover:bg-purple-900 transform transition-all focus:outline-none focus:ring-4 focus:ring-purple-300 flex justify-center items-center gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                            <button type="submit" class="w-full sm:w-auto px-12 py-4 bg-purple-700 text-white text-sm font-black rounded-2xl shadow-md hover:bg-purple-800 hover:-translate-y-1 transition-all uppercase tracking-[0.2em] flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
                                 Guardar Cambios
                             </button>
                         </div>
@@ -140,8 +149,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('proyecto-form');
-
-            // 1. DICCIONARIO DE ICONOS
             const icons = {
                 'default': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>',
                 'proyecto': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" /></svg>',
@@ -149,109 +156,73 @@
                 'texto': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd" /></svg>'
             };
 
-            // --- MAGIA DE DISEÑO ---
             const rawInputs = form.querySelectorAll('input:not([type="hidden"]), textarea, select');
-            
             rawInputs.forEach(input => {
                 if(input.name === 'csrfmiddlewaretoken') return;
-
-                const tagName = input.tagName.toLowerCase();
-                const inputName = input.getAttribute('name') || '';
                 
-                let leftIconHtml = icons['default'];
-                if (inputName.includes('nombre') || inputName.includes('titulo')) leftIconHtml = icons['proyecto'];
-                if (inputName.includes('admin') || inputName.includes('usuario')) leftIconHtml = icons['user'];
-                if (inputName.includes('descrip') || inputName.includes('nota')) leftIconHtml = icons['texto'];
+                const inputName = input.getAttribute('name') || '';
+                const tagName = input.tagName.toLowerCase();
+                
+                let icon = icons['default'];
+                if (inputName.includes('nombre') || inputName.includes('titulo')) icon = icons['proyecto'];
+                if (inputName.includes('admin') || inputName.includes('usuario')) icon = icons['user'];
+                if (inputName.includes('descrip') || inputName.includes('nota')) icon = icons['texto'];
 
                 const wrapper = document.createElement('div');
                 wrapper.className = 'relative mt-1';
                 input.parentNode.insertBefore(wrapper, input);
                 wrapper.appendChild(input);
 
-                const iconContainer = document.createElement('div');
-                const iconPositionClasses = tagName === 'textarea' ? 'pt-4 items-start' : 'items-center';
-                iconContainer.className = `absolute inset-y-0 left-0 pl-3 flex pointer-events-none ${iconPositionClasses}`;
-                iconContainer.innerHTML = leftIconHtml;
-                wrapper.insertBefore(iconContainer, input);
-
-                input.classList.add(
-                    'w-full', 'bg-gray-50', 'text-gray-800', 'text-sm', 
-                    'rounded-xl', 'border', 'border-gray-200', 
-                    'pl-10', 'pr-4', 'py-3', 
-                    'placeholder-gray-400', 'transition-all', 'focus:outline-none', 
-                    'focus:bg-white', 'focus:border-purple-500', 'focus:ring-4', 'focus:ring-purple-100'
-                );
+                const iconDiv = document.createElement('div');
+                // Si es un textarea alineamos el icono arriba, si no, lo centramos
+                const alignClass = tagName === 'textarea' ? 'pt-[0.85rem] items-start' : 'items-center';
+                iconDiv.className = `absolute inset-y-0 left-0 pl-3 flex pointer-events-none ${alignClass}`;
+                iconDiv.innerHTML = icon;
+                wrapper.insertBefore(iconDiv, input);
                 
-                if (tagName === 'select') {
-                    input.classList.add('appearance-none', 'cursor-pointer'); 
-                    const arrowContainer = document.createElement('div');
-                    arrowContainer.className = 'absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none';
-                    arrowContainer.innerHTML = '<svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
-                    wrapper.appendChild(arrowContainer);
-                }
-
-                if (tagName === 'textarea') {
-                    input.classList.add('resize-none');
-                    if(!input.getAttribute('rows')) input.setAttribute('rows', '4');
-                }
-
-                const parentP = wrapper.closest('p');
-                if (parentP) {
-                    const label = parentP.querySelector('label');
-                    if (label) {
-                        label.classList.add('block', 'text-xs', 'font-bold', 'text-gray-500', 'uppercase', 'tracking-widest', 'mb-2', 'ml-1');
-                    }
-                    if (tagName === 'textarea') {
-                        parentP.classList.add('md:col-span-2');
-                    }
+                if (tagName === 'textarea' && !input.getAttribute('rows')) {
+                    input.setAttribute('rows', '4');
                 }
             });
 
-            // --- CAMBIO 4: Textos de SweetAlert para "Edición" ---
             form.addEventListener('submit', function(e) {
-                if (!form.checkValidity()) {
-                    form.reportValidity();
-                    return; 
-                }
-
+                if(!this.checkValidity()) return;
                 e.preventDefault(); 
                 
                 let nombreDisplay = 'este proyecto';
                 const nombreInput = form.querySelector('input[name="nombre"]');
                 if (nombreInput && nombreInput.value) nombreDisplay = nombreInput.value;
-                
+
                 Swal.fire({
-                    title: 'Confirmar Actualización',
-                    text: `¿Deseas guardar los cambios de "${nombreDisplay}"?`,
+                    title: '<span class="text-purple-900 font-bold">Confirmar Actualización</span>',
+                    html: `<p class="text-gray-600 font-medium mt-2">¿Deseas guardar los cambios de "<span class="text-purple-700 font-bold">${nombreDisplay}</span>"?</p>`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Sí, guardar',
                     cancelButtonText: 'Cancelar',
                     buttonsStyling: false,
+                    background: '#faf5ff',
                     customClass: {
-                        popup: 'rounded-3xl p-6 font-sans',
-                        title: 'text-xl font-bold text-gray-800',
-                        htmlContainer: 'text-gray-500 mt-2',
-                        confirmButton: 'bg-purple-800 text-white px-6 py-3 rounded-xl hover:bg-purple-900 transition ml-2 shadow-md font-semibold',
-                        cancelButton: 'bg-white text-gray-500 border border-gray-200 px-6 py-3 rounded-xl hover:bg-gray-50 transition mr-2 font-semibold'
+                        popup: 'rounded-[2rem] p-6 border-2 border-purple-600/30 shadow-2xl',
+                        confirmButton: 'bg-purple-700 text-white px-6 py-3 rounded-xl hover:bg-purple-800 transition-all font-bold tracking-wide uppercase text-xs ml-2 shadow-md',
+                        cancelButton: 'bg-white text-slate-700 border border-slate-200 px-6 py-3 rounded-xl hover:bg-slate-50 transition-all font-bold tracking-wide uppercase text-xs mr-2 shadow-sm'
                     }
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
-                            title: 'Guardando Cambios...',
-                            html: '<div class="flex flex-col items-center"><div class="w-8 h-8 border-4 border-gray-200 border-t-purple-800 rounded-full animate-spin mb-4"></div><span class="text-gray-500 text-sm font-medium">Actualizando base de datos...</span></div>',
+                            title: '<span class="text-purple-900 font-bold">Guardando Cambios...</span>',
+                            html: '<div class="flex flex-col items-center my-4"><div class="animate-spin rounded-full h-10 w-10 border-b-4 border-purple-600 mb-4"></div></div>',
                             showConfirmButton: false,
                             allowOutsideClick: false,
-                            customClass: { popup: 'rounded-3xl p-8' },
-                            didOpen: () => { Swal.showLoading(); }
+                            background: '#faf5ff',
+                            customClass: { popup: 'rounded-[2rem] p-6 border-2 border-purple-600/30 shadow-2xl' }
                         });
-
-                        setTimeout(() => { 
-                            HTMLFormElement.prototype.submit.call(form); 
-                        }, 1000);
+                        setTimeout(() => HTMLFormElement.prototype.submit.call(form), 1000);
                     }
                 });
             });
+
+            tailwind.config = { theme: { extend: { animation: { blob: "blob 15s infinite alternate" }, keyframes: { blob: { "0%": { transform: "translate(0px, 0px) scale(1)" }, "50%": { transform: "translate(80px, -50px) scale(1.1)" }, "100%": { transform: "translate(-50px, 80px) scale(0.9)" } } } } } }
         });
     </script>
 </body>

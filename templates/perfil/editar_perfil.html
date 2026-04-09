@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil | SmartDayz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type="text"], input[type="number"], input[type="tel"] {
+            width: 100%;
+            background-color: #1a1a2e;
+            border: 1px solid #4c1d95;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            color: white;
+            outline: none;
+            transition: all 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, input[type="tel"]:focus {
+            border-color: #9333ea; 
+            box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
+        }
+        input[type="file"] {
+            background-color: #1a1a2e;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            width: 100%;
+            font-size: 0.875rem;
+            color: #9ca3af;
+        }
+        input[type="file"]::file-selector-button {
+            background-color: #9333ea;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+        input[type="file"]::file-selector-button:hover {
+            background-color: #7e22ce;
+        }
+        .clearable-file-input a {
+            color: #c084fc;
+            text-decoration: underline;
+            margin-right: 10px;
+        }
+        .clearable-file-input label {
+            display: inline-block;
+            margin-left: 5px;
+            color: #ef4444;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-[#1a1a2e] text-white">
+
+    <div class="min-h-screen flex items-center justify-center p-6">
+        
+        <div class="bg-[#16213e] rounded-2xl shadow-2xl border border-purple-900/30 p-8 w-full max-w-md text-center">
+            
+            <h2 class="text-3xl font-bold text-white mb-1 uppercase">Editar Perfil</h2>
+            <p class="text-purple-400 font-medium mb-6 text-sm">Actualiza tu información personal</p>
+
+            <form method="POST" enctype="multipart/form-data" class="space-y-5 text-left bg-[#0f3460] p-6 rounded-xl border border-purple-800/50">
+                {% csrf_token %}
+
+                <div>
+                    <label class="block text-gray-400 text-sm font-bold mb-2 uppercase tracking-wide">Foto de Perfil</label>
+                    <div class="text-sm clearable-file-input">
+                        {{ form.foto_perfil }}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-gray-400 text-sm font-bold mb-2 uppercase tracking-wide">Teléfono</label>
+                    {{ form.telefono }}
+                </div>
+
+                <div class="flex gap-4 mt-8 pt-4 border-t border-gray-600">
+                    <a href="/datos/perfil/" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2.5 rounded-lg font-bold transition text-center shadow-md">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2.5 rounded-lg font-bold transition shadow-md">
+                        Guardar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</body>
+</html>

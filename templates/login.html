@@ -1,6 +1,104 @@
-<form method="post">
-    {% csrf_token %}
-    <input type="text" name="username" placeholder="Nombre de usuario">
-    <input type="password" name="password" placeholder="Contraseña">
-    <button type="submit">Iniciar sesión</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión | SmartDayz</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        /* Efecto Cristal Oscuro */
+        .glass-dark {
+            background-color: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animación suave de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center relative px-4 text-slate-100 font-sans">
+
+    <div class="fixed inset-0 z-[-1]">
+        <img src="{% static 'img/fondo_ciudad.jpg' %}" class="w-full h-full object-cover" alt="Fondo Ciudad">
+        <div class="absolute inset-0 bg-slate-900/80 mix-blend-multiply"></div>
+    </div>
+
+    <div class="glass-dark w-full max-w-md rounded-3xl shadow-2xl animate-fade-in relative overflow-hidden">
+        
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-amber-400 to-amber-600 z-20"></div>
+
+        <div class="w-full h-56 relative bg-slate-900">
+            <img src="{% static 'img/logo.png' %}" alt="SmartDayz Logo" class="w-full h-full object-cover object-center">
+            
+            <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-[rgba(15,23,42,0.95)] to-transparent"></div>
+        </div>
+
+        <div class="px-8 pb-8 pt-2 relative z-10">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-extrabold text-white drop-shadow-lg leading-tight mb-2">Iniciar Sesión 👋</h1>
+                <p class="text-sm font-medium text-slate-400">Panel de control SmartDayz</p>
+            </div>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 ml-1" for="username">Nombre de Usuario:</label>
+                    <input type="text" name="username" id="username" placeholder="Ej. patricia_admin" required
+                           class="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400 transition-all placeholder-slate-500 shadow-inner">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-amber-400 uppercase tracking-wider mb-2 ml-1" for="password">Contraseña:</label>
+                    <input type="password" name="password" id="password" placeholder="••••••••" required
+                           class="w-full bg-slate-900/80 border border-slate-700 text-white rounded-xl px-4 py-3 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400 transition-all placeholder-slate-500 shadow-inner">
+                </div>
+
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-extrabold text-sm uppercase tracking-wider py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-amber-500/25 hover:-translate-y-0.5 focus:ring-4 focus:ring-amber-300">
+                        Ingresar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if form.errors %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: '<span class="text-amber-500 font-bold">Acceso Denegado</span>',
+                    text: 'Nombre de usuario o contraseña incorrectos.',
+                    background: '#0f172a',
+                    color: '#f8fafc',
+                    confirmButtonColor: '#f59e0b',
+                    confirmButtonText: 'Reintentar',
+                    customClass: {
+                        popup: 'border border-slate-700 rounded-2xl p-6 font-sans'
+                    }
+                });
+            });
+        </script>
+    {% endif %}
+
+</body>
+</html>

@@ -7,8 +7,9 @@ urlpatterns = [
 
      path('', LoginView.as_view(template_name='login.html'), name='login'),
 
-    path('home/', home, name='home'),
+    #path('home/', home, name='home'),
 
     #URLS CRUD PROVEEDOR
     path('proveedores/crear/', CreateViewProveedor.as_view(), name='crear_proveedor'),
+    
 ]

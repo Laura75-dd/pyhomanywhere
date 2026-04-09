@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo Proveedor | SmartDayz</title>
+    <title>Editar Producto | SmartDayz</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -12,10 +12,9 @@
         body { font-family: 'Inter', sans-serif; }
         ::selection { background-color: #9333ea; color: white; }
 
-        /* Estilos unificados para inputs */
-        input[type="text"], input[type="number"], input[type="email"], select, textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100% !important;
-            padding: 0.75rem 1rem 0.75rem 2.5rem !important; /* Espacio extra a la izquierda para el icono */
+            padding: 0.75rem 1rem 0.75rem 2.5rem !important;
             border-radius: 0.75rem !important;
             border: 1px solid #E5E7EB !important;
             background-color: #F9FAFB !important;
@@ -25,7 +24,6 @@
             outline: none !important;
         }
 
-        /* Focus unificado en morado */
         input:focus, select:focus, textarea:focus {
             border-color: #9333ea !important;
             background-color: #ffffff !important;
@@ -43,7 +41,6 @@
             margin-left: 0.25rem;
         }
 
-        /* Fix para el autocompletado del navegador */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -54,7 +51,6 @@
             transition: background-color 5000s ease-in-out 0s;
         }
 
-        /* Ocultar la flecha nativa del select para poner una personalizada */
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -77,10 +73,10 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-3">
-                    <a href="{% url 'home' %}" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors shadow-sm">
+                    <a href="{% url 'lista_productos' %}" class="p-2 bg-white/10 hover:bg-white/20 rounded-xl text-white transition-colors shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
                     </a>
-                    <span class="text-xl font-bold text-white tracking-tight ml-2 drop-shadow-md">Volver al Home</span>
+                    <span class="text-xl font-bold text-white tracking-tight ml-2 drop-shadow-md">Volver a la Lista</span>
                 </div>
             </div>
         </div>
@@ -95,18 +91,18 @@
                     <div class="flex items-center gap-4">
                         <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-sm shadow-inner border border-white/20">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white drop-shadow-md" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                         </div>
                         <div>
-                            <h2 class="text-3xl font-black text-white leading-tight drop-shadow-md">Registrar Proveedor</h2>
-                            <p class="text-purple-200 text-sm mt-1 font-medium">Ingresa los datos de contacto y tipo de servicio del proveedor.</p>
+                            <h2 class="text-3xl font-black text-white leading-tight drop-shadow-md">Editar Producto</h2>
+                            <p class="text-purple-200 text-sm mt-1 font-medium">Modifica los detalles de este artículo.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="p-10 bg-white">
-                    <form id="proveedor-form" method="POST" action="{% url 'crear_proveedor' %}" class="space-y-6">
+                    <form id="producto-form" method="POST" action="" class="space-y-6">
                         {% csrf_token %}
                         
                         {% if form.errors %}
@@ -118,7 +114,7 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 django-fields-wrapper">
                             {% for field in form %}
-                                <div class="flex flex-col {% if field.name == 'direccion' %}md:col-span-2{% endif %}">
+                                <div class="flex flex-col {% if field.name == 'descripcion' %}md:col-span-2{% endif %}">
                                     <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
                                     {{ field }}
                                     {% if field.help_text %}
@@ -132,12 +128,12 @@
                         </div>
                         
                         <div class="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-slate-100 mt-8 gap-4">
-                            <a href="{% url 'home' %}" class="w-full sm:w-auto px-10 py-4 bg-white border border-slate-200 text-slate-700 text-xs font-black rounded-2xl hover:bg-slate-50 transition-all uppercase tracking-widest text-center shadow-sm">
+                            <a href="{% url 'lista_productos' %}" class="w-full sm:w-auto px-10 py-4 bg-white border border-slate-200 text-slate-700 text-xs font-black rounded-2xl hover:bg-slate-50 transition-all uppercase tracking-widest text-center shadow-sm">
                                 Cancelar
                             </a>
                             <button type="submit" class="w-full sm:w-auto px-12 py-4 bg-purple-700 text-white text-sm font-black rounded-2xl shadow-md hover:bg-purple-800 hover:-translate-y-1 transition-all uppercase tracking-[0.2em] flex items-center justify-center focus:ring-4 focus:ring-purple-500/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
-                                Guardar Proveedor
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" /></svg>
+                                Guardar Cambios
                             </button>
                         </div>
                     </form>
@@ -148,17 +144,13 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('proveedor-form');
+            const form = document.getElementById('producto-form');
 
-            // 1. DICCIONARIO DE ICONOS
             const icons = {
                 'default': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" /></svg>',
-                'empresa': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" /></svg>',
-                'user': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>',
-                'email': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" /><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" /></svg>',
-                'phone': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>',
-                'servicio': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" /></svg>',
-                'direccion': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>'
+                'producto': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" /></svg>',
+                'dinero': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.736 6.979C9.208 6.193 9.696 6 10 6c.304 0 .792.193 1.264.979a1 1 0 001.715-1.029C12.279 4.784 11.232 4 10 4s-2.279.784-2.979 1.95c-.285.477-.507 1.005-.67 1.55H6a1 1 0 000 2h.013a9.358 9.358 0 000 1H6a1 1 0 100 2h.343c.163.545.385 1.073.67 1.55C7.721 15.216 8.768 16 10 16s2.279-.784 2.979-1.95a1 1 0 10-1.715-1.029c-.472.786-.96.979-1.264.979-.304 0-.792-.193-1.264-.979a4.265 4.265 0 01-.264-.521H10a1 1 0 100-2H8.017a7.36 7.36 0 010-1H10a1 1 0 100-2H8.472c.08-.185.167-.36.264-.521z" clip-rule="evenodd" /></svg>',
+                'etiqueta': '<svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd" /></svg>'
             };
 
             const rawInputs = form.querySelectorAll('input:not([type="hidden"]), textarea, select');
@@ -168,24 +160,33 @@
 
                 const tagName = input.tagName.toLowerCase();
                 const inputName = input.getAttribute('name') || '';
-                
-                // Determinar el icono correcto
-                let leftIconHtml = icons['default'];
-                if (inputName.includes('empresa') || inputName.includes('nombre')) leftIconHtml = icons['empresa'];
-                if (inputName.includes('contacto') || inputName.includes('user')) leftIconHtml = icons['user'];
-                if (inputName.includes('email') || inputName.includes('correo')) leftIconHtml = icons['email'];
-                if (inputName.includes('telef') || inputName.includes('phone')) leftIconHtml = icons['phone'];
-                if (inputName.includes('servicio') || inputName.includes('categoria') || inputName.includes('tipo')) leftIconHtml = icons['servicio'];
-                if (inputName.includes('direccion')) leftIconHtml = icons['direccion'];
 
-                // Envolver el elemento para ponerle iconos
+                if (input.type === 'checkbox') {
+                    input.classList.add('w-5', 'h-5', 'text-purple-600', 'bg-gray-50', 'border-gray-300', 'rounded', 'focus:ring-purple-500', 'cursor-pointer');
+                    
+                    const parentDiv = input.closest('div');
+                    if(parentDiv) {
+                        parentDiv.classList.replace('flex-col', 'flex-row');
+                        parentDiv.classList.add('items-center', 'gap-3', 'mt-4');
+                        const label = parentDiv.querySelector('label');
+                        if (label) {
+                            label.classList.remove('uppercase', 'text-xs');
+                            label.classList.add('text-sm', 'font-bold', 'text-gray-700', 'mb-0', 'cursor-pointer');
+                        }
+                    }
+                    return; 
+                }
+
+                let leftIconHtml = icons['default'];
+                if (inputName.includes('nombre')) leftIconHtml = icons['producto'];
+                if (inputName.includes('precio')) leftIconHtml = icons['dinero'];
+                if (inputName.includes('variante')) leftIconHtml = icons['etiqueta'];
+
                 const wrapper = document.createElement('div');
-                wrapper.className = 'relative mt-1';
-                // Cambio sutil: en lugar de buscar la etiqueta P (que cambié a DIV), simplemente envuelve el input
+                wrapper.className = 'relative mt-1 w-full';
                 input.parentNode.insertBefore(wrapper, input);
                 wrapper.appendChild(input);
 
-                // Insertar Icono Izquierdo
                 const iconContainer = document.createElement('div');
                 const iconPositionClasses = tagName === 'textarea' ? 'pt-3 items-start' : 'items-center';
                 iconContainer.className = `absolute inset-y-0 left-0 pl-3 flex pointer-events-none ${iconPositionClasses}`;
@@ -198,14 +199,8 @@
                     arrowContainer.innerHTML = '<svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>';
                     wrapper.appendChild(arrowContainer);
                 }
-
-                if (tagName === 'textarea') {
-                    input.classList.add('resize-none');
-                    if(!input.getAttribute('rows')) input.setAttribute('rows', '3');
-                }
             });
 
-            // --- LÓGICA DE ENVÍO Y SWEETALERT ---
             form.addEventListener('submit', function(e) {
                 if (!form.checkValidity()) {
                     form.reportValidity();
@@ -214,13 +209,9 @@
 
                 e.preventDefault(); 
                 
-                let nombreDisplay = 'este proveedor';
-                const empresaInput = form.querySelector('input[name*="empresa"]') || form.querySelector('input[name*="nombre"]');
-                if (empresaInput && empresaInput.value) nombreDisplay = empresaInput.value;
-                
                 Swal.fire({
-                    title: '¿Confirmar Registro?',
-                    text: `¿Deseas registrar a "${nombreDisplay}" como proveedor?`,
+                    title: '¿Guardar Cambios?',
+                    text: `¿Estás seguro de modificar este producto?`,
                     icon: 'question',
                     showCancelButton: true,
                     confirmButtonText: 'Sí, guardar',
@@ -236,8 +227,8 @@
                 }).then((result) => {
                     if (result.isConfirmed) {
                         Swal.fire({
-                            title: '<span style="color:#3b0764; font-weight: bold;">Guardando Proveedor...</span>',
-                            html: '<div class="flex flex-col items-center my-4"><div class="animate-spin rounded-full h-10 w-10 border-b-4 border-[#9333ea] mb-4"></div><span class="text-gray-500 text-sm font-medium">Procesando información...</span></div>',
+                            title: '<span style="color:#3b0764; font-weight: bold;">Actualizando Producto...</span>',
+                            html: '<div class="flex flex-col items-center my-4"><div class="animate-spin rounded-full h-10 w-10 border-b-4 border-[#9333ea] mb-4"></div><span class="text-gray-500 text-sm font-medium">Guardando información...</span></div>',
                             showConfirmButton: false,
                             allowOutsideClick: false,
                             background: '#f3e8ff',
@@ -253,7 +244,6 @@
             });
         });
 
-        // Configuración de animación para los Blobs
         tailwind.config = {
             theme: { extend: { animation: { blob: "blob 15s infinite alternate" }, keyframes: { blob: { "0%": { transform: "translate(0px, 0px) scale(1)" }, "50%": { transform: "translate(80px, -50px) scale(1.1)" }, "100%": { transform: "translate(-50px, 80px) scale(0.9)" } } } } }
         }

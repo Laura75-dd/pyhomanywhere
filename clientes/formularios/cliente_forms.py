@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import inlineformset_factory
-from clientes.models import Cliente, Pedido, DetallePedido
+from clientes.models import *
 from proyectos.models import Producto 
 
 # ==========================================
@@ -41,6 +41,7 @@ class PedidoForm(forms.ModelForm):
         super(PedidoForm, self).__init__(*args, **kwargs)
         
         if proyecto:
+            self.instance.proyecto = proyecto  # Asignamos el proyecto al pedido en memoria
             # Solo mostramos clientes que pertenezcan a la empresa/proyecto actual
             self.fields['cliente'].queryset = Cliente.objects.filter(proyecto=proyecto)
             self.fields['cliente'].empty_label = "--- Seleccione un Cliente ---"

@@ -3,7 +3,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 # =========================================================
-# MODELO PROYECTO: Representa a cada negocio que usa tu app
+# MODELO PROYECTO: Representa a cada negocio que usa la app
 # =========================================================
 class Proyecto(models.Model):
     nombre = models.CharField(max_length=100, help_text="Ej. Taquería Los Compadres")

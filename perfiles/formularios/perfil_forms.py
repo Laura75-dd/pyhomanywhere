@@ -3,52 +3,51 @@ from django.contrib.auth.models import User
 from perfiles.models import Perfil
 
 class PerfilForm(forms.ModelForm):
-    username = forms.CharField(label='Usuario', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    first_name = forms.CharField(label='Nombre', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    # Campos que van hacia el modelo nativo User
+    username = forms.CharField(label='Usuario', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ej. juanperez'}))
+    first_name = forms.CharField(label='Nombre(s)', widget=forms.TextInput(attrs={'class': 'form-control'}))
     last_name = forms.CharField(label='Apellidos', widget=forms.TextInput(attrs={'class': 'form-control'}))
-    email = forms.EmailField(label='Correo', widget=forms.EmailInput(attrs={'class': 'form-control'}))
-    password = forms.CharField(label='Contraseña', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
     class Meta:
         model = Perfil
-        fields = ['telefono', 'rol', 'puesto', 'puesto_personalizado']
+        # Aquí conservamos el teléfono, el puesto y tu campo personalizado
+        fields = ['telefono', 'puesto', 'puesto_personalizado'] 
         
         widgets = {
-            'telefono': forms.TextInput(attrs={'class': 'form-control'}),
-            'rol': forms.Select(attrs={'class': 'form-control'}),
+            'telefono': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Será su contraseña inicial'}),
             'puesto': forms.Select(attrs={'class': 'form-control'}),
-            'puesto_personalizado': forms.TextInput(attrs={'class': 'form-control'}),
+            'puesto_personalizado': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Especifique el puesto...'}),
         }
 
     def __init__(self, *args, **kwargs):
-        # Extraemos el usuario que pasamos desde la vista
         self.user_creador = kwargs.pop('user', None)
         super(PerfilForm, self).__init__(*args, **kwargs)
-        
-        # Filtro de seguridad para Roles
-        # Si no es superusuario, quitamos Admin y Empleado global
-        if self.user_creador and not self.user_creador.is_superuser:
-            if 'rol' in self.fields:
-                choices_actuales = self.fields['rol'].choices
-                # Solo permitimos roles operativos (ajusta los nombres exactos de tu BD)
-                roles_prohibidos = ['Administrador', 'Empleado']
-                nuevas_choices = [c for c in choices_actuales if c[0] not in roles_prohibidos]
-                self.fields['rol'].choices = nuevas_choices
 
     def save(self, commit=True, proyecto_asignado=None):
+        # 1. Generamos un correo falso obligatorio para Django
+        username_limpio = self.cleaned_data["username"].lower().replace(" ", "")
+        email_generado = f"{username_limpio}@smartdayz.local"
+
+        # 2. Creamos el usuario base
         user = User(
-            username=self.cleaned_data["username"],
-            email=self.cleaned_data["email"],
+            username=username_limpio,
+            email=email_generado,
             first_name=self.cleaned_data["first_name"],
             last_name=self.cleaned_data["last_name"]
         )
-        user.set_password(self.cleaned_data["password"])
+        
+        # 3. Usamos el teléfono como contraseña inicial
+        telefono = self.cleaned_data.get("telefono")
+        password_inicial = telefono if telefono else f"{username_limpio}123"
+        user.set_password(password_inicial)
         
         if commit:
             user.save()
 
+        # 4. Creamos el Perfil y guardamos los puestos tal como los diseñaste
         perfil = super().save(commit=False)
         perfil.usuario = user
+        perfil.rol = 'Empleado'  # El rol se pone automático para que el Admin no trabaje de más
 
         if proyecto_asignado:
             perfil.proyecto = proyecto_asignado

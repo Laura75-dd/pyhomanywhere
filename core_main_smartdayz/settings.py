@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "proveedores",
     "clientes",
 
+    'import_export',
+
 ]
 
 MIDDLEWARE = [
@@ -128,6 +130,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 #URLS de redireccion para login y logout
 
 LOGIN_REDIRECT_URL = 'home/'
-LOGOUT_REDIRECT_URL = 'home/'
+LOGOUT_REDIRECT_URL = '/'
 
 
+# CONFIGURACION DE ARCHIVOS MEDIA imagenes y demases
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

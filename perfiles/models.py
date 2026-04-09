@@ -24,6 +24,7 @@ class Perfil(models.Model):
     rol = models.CharField(max_length=20, choices=ROLES, default='Empleado', verbose_name="Rol")
     puesto = models.CharField(max_length=50, choices=PUESTOS, blank=True, null=True, verbose_name="Puesto")
     puesto_personalizado = models.CharField(max_length=100, blank=True, null=True, verbose_name="Puesto Específico")
+    foto_perfil = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)    
     
     # Conecta al empleado o administrador con su lugar de trabajo.
     proyecto = models.ForeignKey(
@@ -38,7 +39,7 @@ class Perfil(models.Model):
     def __str__(self):
         return f"{self.usuario.get_full_name() or self.usuario.username} - {self.rol}"
 
-    # Facilitan preguntar en el código HTML o en las Vistas qué rol tiene el usuario
+    # Facilitan preguntar en el código qué rol tiene el usuario
     @property
     def is_administrador(self):
         return self.rol == 'Administrador'

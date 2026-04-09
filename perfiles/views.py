@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
 from django.views.generic import (
     CreateView,
     ListView,
@@ -8,11 +7,12 @@ from django.views.generic import (
     DetailView
 )
 
-from .models import Perfil
+from .models import *
 from .formularios.perfil_forms import PerfilForm
 
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin # PARA CLASES
+from django.contrib.auth.decorators import login_required # PARA FUNCIONES
+
 
 from clientes.models import Cliente, Pedido
 from proveedores.models import Proveedor
@@ -59,14 +59,14 @@ class CreateViewPerfil(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Perfil
     form_class = PerfilForm
     template_name = 'perfil/registro_personal.html'
-    success_url = reverse_lazy('home')
+    success_url = '/home/'
     login_url = '/'
 
     def test_func(self):
         if self.request.user.is_superuser:
             return True
         perfil = getattr(self.request.user, 'perfil', None)
-        return perfil and perfil.rol in ['Administrador', 'Empleado']
+        return perfil and perfil.rol == 'Administrador'
 
 # ============================================================
 # Este es el que se envia el usuario al formulario
@@ -87,9 +87,9 @@ class CreateViewPerfil(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         return redirect(self.success_url)
 
 
-class ListViewPerfil(LoginRequiredMixin, ListView):
+class ListViewPerfil(LoginRequiredMixin, ListView,):
     model = Perfil
-    template_name = 'perfiles/lista_equipo.html'
+    template_name = 'perfil/lista_equipo.html'
     context_object_name = 'empleados'
     login_url = '/'
 
@@ -103,3 +103,25 @@ class ListViewPerfil(LoginRequiredMixin, ListView):
             return Perfil.objects.filter(proyecto=perfil.proyecto).exclude(usuario=self.request.user)
 
         return Perfil.objects.none()
+
+
+@login_required(login_url='/')
+def datos_perfil(request):
+    
+    contexto = {
+        'perfil': getattr(request.user, 'perfil', None),
+    }
+    return render(request, 'perfil/datos_perfil.html', contexto)
+
+
+
+class UpdateViewPerfil(LoginRequiredMixin, UpdateView):
+    model = Perfil
+    template_name = 'perfil/editar_perfil.html'
+    fields = ['foto_perfil', 'telefono'] # Solo permitimos editar estos dos campos
+    login_url = '/'
+    success_url = '/datos/perfil/' # Redirige a la vista de datos del perfil después de editar
+
+    def get_object(self):
+        # Asegura que el usuario solo edite su propio perfil
+        return self.request.user.perfil
